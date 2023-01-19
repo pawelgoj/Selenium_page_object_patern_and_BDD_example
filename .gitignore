@@ -1,0 +1,7 @@
+/DDT_venv
+.vscode
+
+.pytest_cashe
+
+**/__pycache__
+
