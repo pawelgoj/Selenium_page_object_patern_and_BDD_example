@@ -1,8 +1,8 @@
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 
 
 class DriverFactory:
@@ -14,6 +14,8 @@ class DriverFactory:
             options = webdriver.ChromeOptions()
             options.add_argument("start-maximized")
             options.set_capability("browserName", "chrome")
+            # options.set_capability("browserVersion", "110")
+            options.set_capability("pageLoadStrategy", "eager")
 
             if selenium_grid_url is None:
                 return webdriver.Chrome(service=ChromeService(
@@ -23,7 +25,7 @@ class DriverFactory:
 
         elif browser == "firefox":
             options = webdriver.FirefoxOptions()
-            options.add_argument("start-maximized")
+            options.set_capability("browserName", "firefox")
 
             if selenium_grid_url is None:
                 return webdriver.Firefox(service=FirefoxService(
