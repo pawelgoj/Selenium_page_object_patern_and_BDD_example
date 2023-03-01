@@ -5,7 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
 
-class TestHomePage:
+class TestLogin:
     """Tests on two environments"""
     website = "https://www.saucedemo.com/"
     correct_password = "secret_sauce"

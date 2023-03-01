@@ -12,22 +12,16 @@ class HomePage:
     @allure.step("Enter username: '{1}'")
     def enter_username(self, username: str):
         self.logger.info(f'Entering username: {username}')
-        self.driver.find_element(
-            *HomePageLocators.input_username).click()
-        self.driver.find_element(
-            *HomePageLocators.input_username).send_keys(username)
-        self.driver.find_element(
-            *HomePageLocators.input_username).click()
+        input = self.driver.find_element(*HomePageLocators.input_username)
+        input.click()
+        input.send_keys(username)
 
     @allure.step("Enter password: '{1}'")
     def enter_password(self, password: str):
         self.logger.info(f'Entering password: {password}')
-        self.driver.find_element(
-            *HomePageLocators.input_password).click()
-        self.driver.find_element(
-            *HomePageLocators.input_password).send_keys(password)
-        self.driver.find_element(
-            *HomePageLocators.input_password).click()
+        input = self.driver.find_element(*HomePageLocators.input_password)
+        input.click()
+        input.send_keys(password)
 
     @allure.step("Click <LOGIN> button")
     def click_button(self):
