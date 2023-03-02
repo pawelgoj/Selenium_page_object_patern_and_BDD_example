@@ -15,7 +15,7 @@ class DriverFactory:
             options.add_argument("start-maximized")
             options.set_capability("browserName", "chrome")
             # options.set_capability("browserVersion", "110")
-            options.set_capability("pageLoadStrategy", "eager")
+            # options.set_capability("pageLoadStrategy", "eager")
 
             if selenium_grid_url is None:
                 return webdriver.Chrome(service=ChromeService(

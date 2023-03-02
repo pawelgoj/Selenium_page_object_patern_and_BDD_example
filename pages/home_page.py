@@ -1,4 +1,4 @@
-from ..locators.locators import HomePageLocators
+from locators.locators import HomePageLocators
 import allure
 import logging
 

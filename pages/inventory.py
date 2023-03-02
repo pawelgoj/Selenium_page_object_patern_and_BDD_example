@@ -1,4 +1,4 @@
-from ..locators.locators import InventoryLocators
+from locators.locators import InventoryLocators
 import allure
 import logging
 
@@ -8,29 +8,47 @@ class Inventory:
         self.driver = driver
         self.logger = logging.getLogger(__name__)
 
-    @allure.step("Click <Add to cart> button of first item")
-    def click_add_to_card_button_of_first_item(self) -> None:
+    @allure.step("Click <Add to cart> button of item")
+    def click_add_to_card_button(self, item: int) -> tuple[str, str] | None:
+        """Click add to card button
+
+        Args:
+            item (int): Number of item in order on webpage.
+
+        Returns:
+            tuple(str, str) | None: (title, price)
+        """
         self.logger.info('clicking button <Add to cart>')
         button = self.driver.find_element(
-            *InventoryLocators.button_of_first_item)
+            *InventoryLocators.get_locator_of_button_of_item(item))
+        to_return = None
+
         if "Add to cart" in button.text:
-            self.driver.click()
+            button.click()
+            title = self.driver.find_element(
+                *InventoryLocators.get_locator_of_title_of_item(item)).text
+            price = self.driver.find_element(
+                *InventoryLocators.get_locator_of_price_of_item(item)).text
+
+            to_return = (title, price)
+
+        return to_return
 
     @allure.step("Check <Remove> button is present")
-    def check_remove_button_is_present(self) -> bool:
-        self.logger.info('Check button <Remove> is present')
+    def check_remove_button_is_present(self, item: int) -> bool:
+        self.logger.info(f'Check button <Remove> of item {item} is present')
         button = self.driver.find_element(
-            *InventoryLocators.button_of_first_item)
+            *InventoryLocators.get_locator_of_button_of_item(item))
         if "Remove" in button.text:
             return True
         else:
             return False
 
     @allure.step("Check <Add to cart> button is present")
-    def check_add_to_cart_button_is_present(self) -> bool:
+    def check_add_to_cart_button_is_present(self, item: int) -> bool:
         self.logger.info('Check button <Add to cart> is present')
         button = self.driver.find_element(
-            *InventoryLocators.button_of_first_item)
+            *InventoryLocators.get_locator_of_button_of_item(item))
         if "Add to cart" in button.text:
             return True
         else:
@@ -107,40 +125,33 @@ class Inventory:
             *InventoryLocators.button_sort_high_to_low).click()
 
     @allure.step("Check items are sorted a to z")
-    def check_items_are_sorted_a_to_z(self, nr_item_to_check: int) -> bool:
+    def check_items_are_sorted_alphabetically(self, nr_item_to_check: int,
+                                              order: str) -> bool:
+        """Check are items in correct order.
+
+        Args:
+            nr_item_to_check (int): Number of items to check.
+            order (str): 'a_to_z' or 'z_to-a'
+
+        Returns:
+            bool: True/False
+        """
         self.logger.info('Check items are sorted a to z')
 
-        previous_title = None
+        word_1 = None
         for i in range(1, nr_item_to_check + 1):
-
-            if previous_title is not None:
+            if word_1 is None:
                 word_1 = self.driver.find_element(
-                    *InventoryLocators.get_locator_of_title_item(i)).text
+                    *InventoryLocators.get_locator_of_title_of_item(i)).text
             else:
                 word_2 = self.driver.find_element(
-                    *InventoryLocators.get_locator_of_title_item(i)).text
+                    *InventoryLocators.get_locator_of_title_of_item(i)).text
 
-                if not Inventory._is_in_alphabetical_order(word_1, word_2):
+                if not Inventory._is_in_alphabetical_order(word_1, word_2)\
+                        and order == 'a_to_z':
                     return False
-
-                word_1 = word_2
-
-        return True
-
-    @allure.step("Check items are sorted z to a")
-    def check_items_are_sorted_z_to_a(self, nr_item_to_check: int) -> bool:
-        self.logger.info('Check items are sorted z to a')
-        previous_title = None
-        for i in range(1, nr_item_to_check + 1):
-
-            if previous_title is not None:
-                word_1 = self.driver.find_element(
-                    *InventoryLocators.get_locator_of_title_item(i)).text
-            else:
-                word_2 = self.driver.find_element(
-                    *InventoryLocators.get_locator_of_title_item(i)).text
-
-                if not Inventory._is_in_alphabetical_order(word_2, word_1):
+                elif not Inventory._is_in_alphabetical_order(word_2, word_1)\
+                        and order == 'z_to_a':
                     return False
 
                 word_1 = word_2
@@ -148,43 +159,32 @@ class Inventory:
         return True
 
     @allure.step("Check prices are sorted low to high")
-    def check_prices_are_sorted_low_to_high(self, nr_item_to_check: int)\
-            -> bool:
+    def check_prices_are_sorted_by_price(self, nr_item_to_check: int,
+                                         order: str) -> bool:
+        """Check are items in correct order.
+
+        Args:
+            nr_item_to_check (int): Number of items to check.
+            order (str): 'asc' or 'desc'
+
+        Returns:
+            bool: True/False
+        """
         self.logger.info('Check prices are sorted low to high')
         previous_number = None
         for i in range(1, nr_item_to_check + 1):
 
-            if previous_number is not None:
+            if previous_number is None:
                 price_1 = self.driver.find_element(
-                    *InventoryLocators.get_locator_of_price_item(i)).text
-                price_1 = int(price_1.replace("$", ""))
+                    *InventoryLocators.get_locator_of_price_of_item(i)).text
+                price_1 = float(price_1.replace("$", ""))
             else:
                 price_2 = self.driver.find_element(
-                    *InventoryLocators.get_locator_of_price_item(i)).text
-                price_2 = int(price_1.replace("$", ""))
-                if price_2 <= price_1:
+                    *InventoryLocators.get_locator_of_price_of_item(i)).text
+                price_2 = float(price_1.replace("$", ""))
+                if price_2 <= price_1 and order == 'asc':
                     return False
-
-                price_1 = price_2
-
-        return True
-
-    @allure.step("Check prices are sorted high to low")
-    def check_prices_are_sorted_high_to_low(self, nr_item_to_check: int)\
-            -> bool:
-        self.logger.info('Check prices are sorted high to low')
-        previous_number = None
-        for i in range(1, nr_item_to_check + 1):
-
-            if previous_number is not None:
-                price_1 = self.driver.find_element(
-                    *InventoryLocators.get_locator_of_price_item(i)).text
-                price_1 = int(price_1.replace("$", ""))
-            else:
-                price_2 = self.driver.find_element(
-                    *InventoryLocators.get_locator_of_price_item(i)).text
-                price_2 = int(price_1.replace("$", ""))
-                if price_2 >= price_1:
+                elif price_1 <= price_2 and order == 'desc':
                     return False
 
                 price_1 = price_2
@@ -201,4 +201,7 @@ class Inventory:
         for i in range(number_of_characters_to_check):
             if word_1[i] > word_2[i]:
                 return False
-        return True
+            elif word_2[i] > word_1[i]:
+                return True
+            else:
+                continue

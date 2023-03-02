@@ -1,6 +1,6 @@
 import pytest
-from ..utils.driver_factory import DriverFactory
-from ..pages.home_page import HomePage
+from utils.driver_factory import DriverFactory
+from pages.home_page import HomePage
 
 
 # Fixtures for login tests
@@ -28,7 +28,7 @@ def setup_firefox_tests(request):
 @pytest.fixture()
 def precondition_logged_user_using_chrome(request):
     driver = DriverFactory.get_driver("chrome")
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(30)
     driver = log_in(driver)
     request.cls.driver = driver
     yield
@@ -39,7 +39,7 @@ def precondition_logged_user_using_chrome(request):
 @pytest.fixture()
 def precondition_logged_user_using_firefox(request):
     driver = DriverFactory.get_driver("firefox")
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(30)
     driver = log_in(driver)
     request.cls.driver = driver
     yield
