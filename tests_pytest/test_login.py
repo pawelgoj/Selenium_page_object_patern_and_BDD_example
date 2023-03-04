@@ -1,4 +1,3 @@
-from time import sleep
 import allure
 import pytest
 from pages.home_page import HomePage
