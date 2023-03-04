@@ -1,6 +1,7 @@
 from locators.locators import CheckoutCompleteLocators
 import allure
 import logging
+from allure_commons.types import AttachmentType
 
 
 class CheckoutComplete:
@@ -14,6 +15,11 @@ class CheckoutComplete:
         self.logger.info('Checking message')
         message_web = self.driver.find_element(
             *CheckoutCompleteLocators.message).text
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="check_message_checkout_complete",
+                      attachment_type=AttachmentType.PNG)
+
         if message in message_web:
             return True
         else:

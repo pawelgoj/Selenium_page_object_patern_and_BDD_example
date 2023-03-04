@@ -2,6 +2,7 @@ from locators.locators import CheckoutStepOneLocators
 from selenium.webdriver.common.action_chains import ActionChains
 import allure
 import logging
+from allure_commons.types import AttachmentType
 
 
 class CheckoutStepOne:
@@ -54,6 +55,10 @@ class CheckoutStepOne:
         text = self.driver.find_element(
             *CheckoutStepOneLocators.message_box
         ).text
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="messagebox_checkout_step_one",
+                      attachment_type=AttachmentType.PNG)
 
         if message in text:
             return True

@@ -6,6 +6,7 @@ from pages.cart import Cart
 from pages.checkout_step_one import CheckoutStepOne
 from pages.checkout_step_two import CheckoutStepTwo
 from pages.checkout_complete import CheckoutComplete
+from allure_commons.types import AttachmentType
 
 
 class TestShopping:
@@ -19,10 +20,10 @@ class TestShopping:
     @ allure.title("Test add items to cart")
     @ allure.severity(allure.severity_level.CRITICAL)
     @ pytest.mark.parametrize("setup",
-                            [
-                                "precondition_logged_user_using_chrome",
-                                "precondition_logged_user_using_firefox"
-                            ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_add_items_to_cart(self,
                                setup, request,
                                number_of_products=3):
@@ -41,10 +42,10 @@ class TestShopping:
     @ allure.title("Test check buttons change text from <Add to cart> to <Remove>")
     @ allure.severity(allure.severity_level.MINOR)
     @ pytest.mark.parametrize("setup",
-                        [
-                            "precondition_logged_user_using_chrome",
-                            "precondition_logged_user_using_firefox"
-                        ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_check_change_buttons_state(self,
                                         setup, request,
                                         number_of_products=3):
@@ -61,10 +62,10 @@ class TestShopping:
     @ allure.title("Remove one item in cart")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_remove_one_item_in_cart(self,
                                      setup, request):
 
@@ -77,10 +78,10 @@ class TestShopping:
     @ allure.title("Fill form correct data in checkout")
     @ allure.severity(allure.severity_level.CRITICAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_fill_form_correct_data_in_checkout(self,
                                                 setup, request):
         request.getfixturevalue(setup)
@@ -95,18 +96,9 @@ class TestShopping:
     @ allure.title("Fill form incorrect data in checkout")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
-    @ pytest.mark.parametrize("name, surname, zip, message",
                               [
-                                  ("", "Teso", "43-500",
-                                   "Error: First Name is required"),
-                                  ("Test", "", "43-500",
-                                   "Error: Last Name is required"),
-                                  ("Test", "Teso", "",
-                                   "Error: Postal Code is required")
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
                               ])
     def test_fill_form_incorrect_data_in_checkout(self,
                                                   setup, request,
@@ -123,10 +115,10 @@ class TestShopping:
     @ allure.title("Check is correct data in checkout step two")
     @ allure.severity(allure.severity_level.CRITICAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_check_is_correct_data_in_checkout_step_two(self,
                                                         setup, request):
         request.getfixturevalue(setup)
@@ -156,10 +148,10 @@ class TestShopping:
     @ allure.title("Finalize order")
     @ allure.severity(allure.severity_level.CRITICAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_finalize_order(self, setup, request):
         request.getfixturevalue(setup)
         self.test_check_is_correct_data_in_checkout_step_two(
@@ -173,10 +165,10 @@ class TestShopping:
     @ allure.title("From checkout-complete page back home")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_from_checkout_complete_back_to_home(self,
                                                  setup, request):
         request.getfixturevalue(setup)
@@ -187,10 +179,10 @@ class TestShopping:
     @ allure.title("Show cart and then continue shopping")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_show_cart_and_then_continue_shopping(self,
                                                   setup, request):
         request.getfixturevalue(setup)
@@ -202,10 +194,10 @@ class TestShopping:
     @ allure.title("Cancel filing checkout form")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_cancel_filing_checkout_form(self,
                                          setup, request):
         request.getfixturevalue(setup)
@@ -220,10 +212,10 @@ class TestShopping:
     @ allure.title("Sort items by price low to high")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_sort_items_by_price_low_to_high(self,
                                              setup, request):
         request.getfixturevalue(setup)
@@ -235,10 +227,10 @@ class TestShopping:
     @ allure.title("Sort items by price high to low")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                [
-                    "precondition_logged_user_using_chrome",
-                    "precondition_logged_user_using_firefox"
-                ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_sort_items_by_price_high_to_low(self,
                                              setup, request):
         request.getfixturevalue(setup)
@@ -250,10 +242,10 @@ class TestShopping:
     @ allure.title("Sort items by name A to Z")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_sort_items_by_name_a_to_z(self,
                                        setup, request):
         request.getfixturevalue(setup)
@@ -266,10 +258,10 @@ class TestShopping:
     @ allure.title("Sort items by name Z to A")
     @ allure.severity(allure.severity_level.NORMAL)
     @ pytest.mark.parametrize("setup",
-                    [
-                        "precondition_logged_user_using_chrome",
-                        "precondition_logged_user_using_firefox"
-                    ])
+                              [
+                                  "precondition_logged_user_using_chrome",
+                                  "precondition_logged_user_using_firefox"
+                              ])
     def test_sort_items_by_name_z_to_a(self,
                                        setup, request):
         request.getfixturevalue(setup)

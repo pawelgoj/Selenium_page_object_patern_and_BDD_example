@@ -1,6 +1,7 @@
 from locators.locators import CartLocators
 import allure
 import logging
+from allure_commons.types import AttachmentType
 
 
 class Cart:
@@ -24,6 +25,10 @@ class Cart:
         cart_items = self.driver.find_elements(
             *CartLocators.cart_item)
 
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="items_in_cart",
+                      attachment_type=AttachmentType.PNG)
+
         if len(values_to_check) != len(cart_items):
             logging.warning("Wrong number of items in cart!!!")
             return False
@@ -37,11 +42,13 @@ class Cart:
             for to_check in values_to_check:
                 if title == to_check[0]:
                     found_title = True
-                    if to_check[2] not in item.find_element(*CartLocators.quantity).text:
+                    if to_check[2] not in item.find_element(
+                            *CartLocators.quantity).text:
                         logging.warning(
                             f"Item {count + 1} have wrong quantity!!!")
                         return_value = False
-                    if to_check[1] not in item.find_element(*CartLocators.price).text:
+                    if to_check[1] not in item.find_element(
+                            *CartLocators.price).text:
                         logging.warning(
                             f"Item {count + 1} have wrong price!!!")
                         return_value = False
@@ -75,6 +82,11 @@ class Cart:
     def check_item_is_removed(self, title: str) -> bool:
         self.logger.info('checking item is removed')
         cart_items = self.driver.find_elements(*CartLocators.cart_item)
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="items_in_cart_removed",
+                      attachment_type=AttachmentType.PNG)
+
         for item in cart_items:
             if title in item.find_element(*CartLocators.title).text:
                 return False

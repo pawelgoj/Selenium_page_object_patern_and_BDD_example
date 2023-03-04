@@ -1,7 +1,8 @@
 /DDT_venv
 .vscode
-
+/allure
 .pytest_cashe
-
+*.png
+*.log
 **/__pycache__
 

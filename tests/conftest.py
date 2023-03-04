@@ -1,13 +1,32 @@
 import pytest
 from utils.driver_factory import DriverFactory
 from pages.home_page import HomePage
+# pandas for importing and processing data from csv files (excel source)
+import pandas as pd
+
+
+# To generate parametrization from file
+def pytest_generate_tests(metafunc):
+    if "name" in metafunc.fixturenames\
+            and "surname" in metafunc.fixturenames\
+            and "zip" in metafunc.fixturenames\
+            and "message" in metafunc.fixturenames:
+
+        df = pd.read_csv(
+            'data_for_tests/wrong_checkout_form_test_data.csv', sep=";")
+        df = df.fillna("")
+
+        data = [(df.loc[i]["name"], df.loc[i]["surname"], df.loc[i]["zip"],
+                df.loc[i]["message"]) for i in range(df.shape[0])]
+
+        metafunc.parametrize("name, surname, zip, message", data)
 
 
 # Fixtures for login tests
 @pytest.fixture()
 def setup_chrome_tests(request):
     driver = DriverFactory.get_driver("chrome")
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(30)
     request.cls.driver = driver
     yield
 
@@ -17,7 +36,7 @@ def setup_chrome_tests(request):
 @pytest.fixture()
 def setup_firefox_tests(request):
     driver = DriverFactory.get_driver("firefox")
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(30)
     request.cls.driver = driver
     yield
 

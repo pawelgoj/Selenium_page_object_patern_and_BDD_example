@@ -2,6 +2,7 @@ from locators.locators import CheckoutStepTwoLocators
 import allure
 import logging
 import re
+from allure_commons.types import AttachmentType
 
 
 class CheckoutStepTwo:
@@ -23,6 +24,10 @@ class CheckoutStepTwo:
         self.logger.info('Checking products in checkout')
         cart_items = self.driver.find_elements(
             *CheckoutStepTwoLocators.cart_item)
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="products_in_checkout",
+                      attachment_type=AttachmentType.PNG)
 
         checks = []
         for item in cart_items:
@@ -53,6 +58,10 @@ class CheckoutStepTwo:
         total_price_without_tax_web = self.driver.find_element(
             *CheckoutStepTwoLocators.total_price_without_tax
         ).text
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="check_total_prices",
+                      attachment_type=AttachmentType.PNG)
 
         mach = re.search("[0-9]+.[0-9]+", total_price_without_tax_web)
         total_price_without_tax_web = float(mach[0])

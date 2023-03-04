@@ -5,6 +5,7 @@ from pages.home_page import HomePage
 from pages.inventory import Inventory
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from allure_commons.types import AttachmentType
 
 
 class TestLogin:
@@ -27,8 +28,18 @@ class TestLogin:
         home_page.enter_password(self.correct_password)
         home_page.click_button()
         inventory = Inventory(self.driver)
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="login",
+                      attachment_type=AttachmentType.PNG)
+
         assert self.driver.current_url == self.website + "inventory.html"
         inventory.logout()
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="logout",
+                      attachment_type=AttachmentType.PNG)
+
         assert self.driver.current_url == self.website
 
     @ allure.title("Test locked user login")

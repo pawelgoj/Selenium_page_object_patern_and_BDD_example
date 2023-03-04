@@ -1,6 +1,7 @@
 from locators.locators import InventoryLocators
 import allure
 import logging
+from allure_commons.types import AttachmentType
 
 
 class Inventory:
@@ -39,6 +40,11 @@ class Inventory:
         self.logger.info(f'Check button <Remove> of item {item} is present')
         button = self.driver.find_element(
             *InventoryLocators.get_locator_of_button_of_item(item))
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="check_remove_button",
+                      attachment_type=AttachmentType.PNG)
+
         if "Remove" in button.text:
             return True
         else:
@@ -49,6 +55,11 @@ class Inventory:
         self.logger.info('Check button <Add to cart> is present')
         button = self.driver.find_element(
             *InventoryLocators.get_locator_of_button_of_item(item))
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="check_add_to_cart_button",
+                      attachment_type=AttachmentType.PNG)
+
         if "Add to cart" in button.text:
             return True
         else:
@@ -138,6 +149,10 @@ class Inventory:
         """
         self.logger.info('Check items are sorted a to z')
 
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name=f"check_items_are_sorted_alphabetically_{order}",
+                      attachment_type=AttachmentType.PNG)
+
         word_1 = None
         for i in range(1, nr_item_to_check + 1):
             if word_1 is None:
@@ -171,6 +186,11 @@ class Inventory:
             bool: True/False
         """
         self.logger.info('Check prices are sorted low to high')
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name=f"check_prices_are_sorted_by_price_{order}",
+                      attachment_type=AttachmentType.PNG)
+
         previous_number = None
         for i in range(1, nr_item_to_check + 1):
 

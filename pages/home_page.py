@@ -1,6 +1,7 @@
 from locators.locators import HomePageLocators
 import allure
 import logging
+from allure_commons.types import AttachmentType
 
 
 class HomePage:
@@ -33,5 +34,9 @@ class HomePage:
     def check_message_container_correct(self, message: str) -> bool:
         self.logger.info(f'Checking message: "{message}" in container')
         element = self.driver.find_element(*HomePageLocators.error_message)
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="message_home_page",
+                      attachment_type=AttachmentType.PNG)
 
         return element.get_attribute("textContent") == message

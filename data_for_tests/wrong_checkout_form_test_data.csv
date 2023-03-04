@@ -1,0 +1,4 @@
+﻿name;surname;zip;message
+;Teso;43-500;Error: First Name is required
+Test;;43-500;Error: Last Name is required
+Test;Teso;;Error: Postal Code is required
