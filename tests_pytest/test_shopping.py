@@ -103,6 +103,10 @@ class TestShopping:
     def test_fill_form_incorrect_data_in_checkout(self,
                                                   setup, request,
                                                   name, surname, zip, message):
+        name = name.strip()
+        surname = surname.strip()
+        zip = zip.strip()
+
         request.getfixturevalue(setup)
         self.test_add_items_to_cart(
             setup, request, number_of_products=3)
@@ -221,7 +225,11 @@ class TestShopping:
         request.getfixturevalue(setup)
         self.inventory = Inventory(self.driver)
         self.inventory.sort_price_low_to_high()
-        self.driver.save_screenshot('test_sort_items_by_name_low_to_high.png')
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="test_sort_items_by_price_low_to_high",
+                      attachment_type=AttachmentType.PNG)
+
         assert self.inventory.check_prices_are_sorted_by_price(4, 'asc')
 
     @ allure.title("Sort items by price high to low")
@@ -236,7 +244,11 @@ class TestShopping:
         request.getfixturevalue(setup)
         self.inventory = Inventory(self.driver)
         self.inventory.sort_price_high_to_low()
-        self.driver.save_screenshot('test_sort_items_by_name_low_to_high.png')
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="test_sort_items_by_price_high_to_low",
+                      attachment_type=AttachmentType.PNG)
+
         assert self.inventory.check_prices_are_sorted_by_price(4, 'desc')
 
     @ allure.title("Sort items by name A to Z")
@@ -251,7 +263,11 @@ class TestShopping:
         request.getfixturevalue(setup)
         self.inventory = Inventory(self.driver)
         self.inventory.sort_items_A_to_Z()
-        self.driver.save_screenshot('test_sort_items_by_name_a_to_z.png')
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="test_sort_items_by_name_a_to_z",
+                      attachment_type=AttachmentType.PNG)
+
         assert self.inventory.check_items_are_sorted_alphabetically(
             4, 'a_to_z')
 
@@ -267,6 +283,10 @@ class TestShopping:
         request.getfixturevalue(setup)
         self.inventory = Inventory(self.driver)
         self.inventory.sort_items_Z_to_A()
-        self.driver.save_screenshot('test_sort_items_by_name_z_to_a.png')
+
+        allure.attach(self.driver.get_screenshot_as_png(),
+                      name="test_sort_items_by_name_z_to_a",
+                      attachment_type=AttachmentType.PNG)
+
         assert self.inventory.check_items_are_sorted_alphabetically(
             4, 'z_to_a')

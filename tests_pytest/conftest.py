@@ -29,7 +29,7 @@ def setup_chrome_tests(request):
     driver.implicitly_wait(30)
     request.cls.driver = driver
     yield
-
+    driver.delete_all_cookies()
     driver.quit()
 
 
@@ -39,7 +39,7 @@ def setup_firefox_tests(request):
     driver.implicitly_wait(30)
     request.cls.driver = driver
     yield
-
+    driver.delete_all_cookies()
     driver.quit()
 
 
@@ -51,7 +51,7 @@ def precondition_logged_user_using_chrome(request):
     driver = log_in(driver)
     request.cls.driver = driver
     yield
-
+    driver.delete_all_cookies()
     driver.quit()
 
 
@@ -62,7 +62,7 @@ def precondition_logged_user_using_firefox(request):
     driver = log_in(driver)
     request.cls.driver = driver
     yield
-
+    driver.delete_all_cookies()
     driver.quit()
 
 

@@ -6,14 +6,13 @@ from pages.cart import Cart
 from pages.checkout_complete import CheckoutComplete
 from pages.checkout_step_one import CheckoutStepOne
 from pages.checkout_step_two import CheckoutStepTwo
-
-from pages.inventory import Inventory
+from behave import step
 
 
 @when(u'the user add "{quantity}" items to cart')
 def user_add_items_to_cart(context, quantity):
     context.values_to_check = []
-    for item in range(1, quantity + 1):
+    for item in range(1, int(quantity) + 1):
         title, price = context.inventory.click_add_to_card_button(item)
         context.values_to_check.append((title, price, "1"))
 
@@ -23,7 +22,15 @@ def click_shopping_cart_link_button(context):
     context.inventory.click_shopping_cart_link_button()
 
 
-@given(u'correct data in cart is displayed')
+@given(u'cart is displayed')
+def cart_is_displayed(context):
+    context.inventory.click_shopping_cart_link_button()
+    context.cart = Cart(context.driver)
+    allure.attach(context.driver.get_screenshot_as_png(),
+                  name="cart_is_displayed",
+                  attachment_type=AttachmentType.PNG)
+
+
 @then(u'correct data in cart is displayed')
 def correct_data_in_cart_is_displayed(context):
     context.cart = Cart(context.driver)
@@ -33,9 +40,10 @@ def correct_data_in_cart_is_displayed(context):
 @given(u'"{quantity}" items in cart')
 def given_items_in_cart(context, quantity):
     context.values_to_check = []
-    for item in range(1, quantity + 1):
+    for item in range(1, int(quantity) + 1):
         title, price = context.inventory.click_add_to_card_button(item)
         context.values_to_check.append((title, price, "1"))
+    context.inventory.click_shopping_cart_link_button()
     context.cart = Cart(context.driver)
 
 
@@ -51,15 +59,19 @@ def removed_item_is_not_present_in_cart(context):
 
 @given(u'page "https://www.saucedemo.com/checkout-step-one.html" is displayed')
 def page_is_displayed_step_one(context):
-    allure.attach(context.driver.get_screenshot_as_png(),
-                  name=f"step_one",
-                  attachment_type=AttachmentType.PNG)
     context.cart.click_checkout()
+    allure.attach(context.driver.get_screenshot_as_png(),
+                  name="step_one",
+                  attachment_type=AttachmentType.PNG)
     context.checkout_step_one = CheckoutStepOne(context.driver)
 
 
+@given(u'the user fill form by: username: "{name}", surname: "{surname}" and zip: "{zip}"')
 @when(u'the user fill form by: username: "{name}", surname: "{surname}" and zip: "{zip}"')
 def the_user_fill_form_by(context, name, surname, zip):
+    name = name.strip()
+    surname = surname.strip()
+    zip = zip.strip()
     context.checkout_step_one.fill_form(name, surname, zip)
     context.checkout_step_one.click_continue_button()
 
@@ -82,8 +94,19 @@ def then_page_is_displayed(context, web):
     assert context.driver.current_url == web
 
 
+@given(u'page "https://www.saucedemo.com/checkout-step-two.html" is displayed')
+def then_page_step_two_is_displayed(context):
+
+    context.checkout_step_two = CheckoutStepTwo(context.driver)
+    allure.attach(context.driver.get_screenshot_as_png(),
+                  name="page_step_two",
+                  attachment_type=AttachmentType.PNG)
+
+
 @then(u'correct data on page "https://www.saucedemo.com/checkout-step-two.html"')
 def correct_data_on_page_checkout_step_two(context):
+
+    tax_percent = 8
 
     titles = [item[0] for item in context.values_to_check]
     context.checkout_step_two = CheckoutStepTwo(context.driver)
@@ -95,7 +118,7 @@ def correct_data_on_page_checkout_step_two(context):
         mach = re.search('[0-9]+.[0-9]+', item[1])
         sum_price += float(mach[0])
 
-    tax = round((context.tax_percent / 100) * sum_price, 2)
+    tax = round((tax_percent / 100) * sum_price, 2)
     sum_price = round(sum_price, 2)
     total = sum_price + tax
 
@@ -179,3 +202,26 @@ def check_sort_items_Z_to_A(context):
 @when(u'the user click button cancel')
 def the_user_click_button_cancel(context):
     context.checkout_step_one.click_cancel_button()
+
+
+@given(u'page "https://www.saucedemo.com/checkout-complete.html" is displayed')
+def step_impl(context):
+    context.values_to_check = []
+    for item in range(1, 4):
+        title, price = context.inventory.click_add_to_card_button(item)
+        context.values_to_check.append((title, price, "1"))
+    context.inventory.click_shopping_cart_link_button()
+
+    context.cart = Cart(context.driver)
+    context.cart.click_checkout()
+
+    context.checkout_step_one = CheckoutStepOne(context.driver)
+    context.checkout_step_one.fill_form("Tester", "Testowaty", "56-234")
+    context.checkout_step_one.click_continue_button()
+
+    context.checkout_step_two = CheckoutStepTwo(context.driver)
+    context.checkout_step_two.click_finish()
+    context.checkout_complete = CheckoutComplete(context.driver)
+    allure.attach(context.driver.get_screenshot_as_png(),
+                  name="page_complete",
+                  attachment_type=AttachmentType.PNG)
