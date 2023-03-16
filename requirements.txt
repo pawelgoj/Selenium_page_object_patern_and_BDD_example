@@ -1,0 +1,3 @@
+selenium
+Faker
+webdriver-manager
