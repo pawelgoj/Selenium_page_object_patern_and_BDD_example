@@ -1,3 +1,4 @@
 selenium
 Faker
 webdriver-manager
+allure-pytest
