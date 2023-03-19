@@ -14,6 +14,7 @@ class TestLogin:
 
     @ allure.title("Test normal user login and and logout")
     @ allure.severity(allure.severity_level.CRITICAL)
+    @ allure.feature("Login form")
     @ pytest.mark.parametrize("setup",
                               [
                                   "setup_chrome_tests",
@@ -43,6 +44,7 @@ class TestLogin:
 
     @ allure.title("Test locked user login")
     @ allure.severity(allure.severity_level.CRITICAL)
+    @ allure.feature("Login form")
     @ pytest.mark.parametrize("setup",
                               [
                                   "setup_chrome_tests",
@@ -60,6 +62,7 @@ class TestLogin:
 
     @ allure.title("Test user login wrong password.")
     @ allure.severity(allure.severity_level.CRITICAL)
+    @ allure.feature("Login form")
     @ pytest.mark.parametrize("username, password",
                               [
                                   ('standard_user', '123fgrts'),
